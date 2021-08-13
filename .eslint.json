@@ -1,0 +1,7 @@
+{
+  "extends": "@nickgraffis/eslint-config",
+  "env": {
+    "jest": true
+  },
+  "plugins": ["jest"]
+}

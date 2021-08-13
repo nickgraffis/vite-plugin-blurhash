@@ -1,0 +1,53 @@
+{
+  "name": "vite-plugin-blurhash",
+  "version": "0.0.1",
+  "description": "Vite plugin to create blurhash strings for all images inside a certain directory, or from the provided set of images. Hashes are then saved to an output file and stored in vite's define global variables.",
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "blurhash"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickgraffis/vite-plugin-blurhash.git"
+  },
+  "author": "Nick Graffis <hi@nickgraffis.me>",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/nickgraffis/vite-plugin-blurhash#readme",
+  "bugs": "https://github.com/nickgraffis/vite-plugin-blurhash/issues",
+  "scripts": {
+    "dev": "npm run build -- --watch",
+    "build": "tsup src/index.ts --dts --format cjs,esm",
+    "test": "jest",
+    "release": "git-ensure --no-behind -b main --clean && bumpp --commit --tag --push"
+  },
+  "devDependencies": {
+    "@nickgraffis/eslint-config": "^1.0.0",
+    "@types/jest": "^27.0.1",
+    "@types/request": "^2.48.7",
+    "@types/sharp": "^0.28.5",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "bumpp": "^6.0.6",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.4",
+    "tsup": "^4.13.1",
+    "typescript": "^4.3.5",
+    "vite": "^2.4.4"
+  },
+  "dependencies": {
+    "blurhash": "^1.1.3",
+    "camelcase": "^6.2.0",
+    "chalk": "^4.1.2",
+    "is-image": "^3.0.0",
+    "request": "^2.88.2",
+    "sharp": "^0.28.3"
+  }
+}
