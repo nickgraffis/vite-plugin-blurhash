@@ -1,9 +1,8 @@
 export type Images = { [key: string]: string }
 
 export type Options = {
-  inputPath?: string | boolean,
-  mapPath?: string,
-  saveMap?: boolean,
+  imageDir?: string | boolean,
+  mapPath?: string | boolean,
   define?: boolean,
   images?: Images,
   log?: boolean,

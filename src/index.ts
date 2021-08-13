@@ -10,23 +10,23 @@ import { mergeImagesAndImageDir } from './utils/mergeImagesAndImageDir';
  * Save them to the define variabel inside vite and/or in the blurhash-map.json file.
  * @param {Options} options
  **/
-const defineHashes = (options: Options): { define?: { [key: string]: string } } => {
-  const imageDir = options.inputPath && existsSync(process.cwd() + options.inputPath) ? process.cwd() + options.inputPath : false //Get the image directory, unless set to false
+export const defineHashes =  (options: Options): { define?: { [key: string]: string } } => {
+  const imageDir = options.imageDir && existsSync(process.cwd() + options.imageDir) ? process.cwd() + options.imageDir : false //Get the image directory, unless set to false
 
   const imagesToBlur = mergeImagesAndImageDir({ 
     images: options?.images || {}, 
     imageDir: imageDir, 
   })
 
-  const mapPath = process.cwd() + options.mapPath
-  const blurhashMapExists = existsSync(mapPath)
+  const mapPath = options.mapPath ? process.cwd() + options.mapPath : false
+  const blurhashMapExists = mapPath ? existsSync(mapPath) : false
 
-  if (!blurhashMapExists && options.saveMap) {
+  if (!blurhashMapExists && mapPath) {
     console.log(chalk.green(`Writing ${mapPath}.`))
     writeFileSync(mapPath, JSON.stringify({}));
   }
 
-  const blurhashMap = options.saveMap ? JSON.parse(readFileSync(mapPath, 'utf8')) : {}
+  const blurhashMap = mapPath ? JSON.parse(readFileSync(mapPath, 'utf8')) : {}
 
   for (let i = 0; i < imagesToBlur.length; i++) {
     let name = Object.keys(imagesToBlur[i])[0];
@@ -34,7 +34,7 @@ const defineHashes = (options: Options): { define?: { [key: string]: string } } 
     if (!blurhashMap[name]) {
       blurhashThis(file).then((hash) => {
         blurhashMap[name] = JSON.stringify(hash);
-        writeFileSync(
+        if (mapPath) writeFileSync(
           mapPath, JSON.stringify(blurhashMap, null, 2)
         );
         if (options.log) console.log(chalk.green(`✔ Finished hashing ${name}!`));
@@ -58,19 +58,17 @@ const defineHashes = (options: Options): { define?: { [key: string]: string } } 
  * @param {Options} options
  * @return {Plugin}
  * @options
- * - inputPath: string: The directory to read images from. Defaults to /src/assets/images
- * - mapPath: string: The path to save the blurhash map to. Defaults to /src/assets/images/blurhash-map.json
- * - saveMap: boolean: Whether or not to save the blurhash map to the mapPath. Defaults to true
+ * - imageDir: string | boolean: The directory to read images from. Defaults to /src/assets/images
+ * - mapPath: string | false: The path to save the blurhash map to. Defaults to /src/assets/images/blurhash-map.json
  * - define: boolean: Whether or not to define the blurhash map in the vite config. Defaults to true
  * - images: object: An object of images to blurhash. 
- * -- key: string: The name of the image (for the blurhash map and the define global variable)
- * -- value: string: The path to the image, or url to the image
+ * ---- key: string: The name of the image (for the blurhash map and the define global variable)
+ * ---- value: string: The path to the image, or url to the image
  **/
 const plugin = (options: Options): Plugin => {
   options = {
-    saveMap: true, //Default saveMap to true
     define: true, //Default define to true
-    inputPath: '/src/assets/images', //Default inputPath to /src/assets/images
+    imageDir: '/src/assets/images', //Default inputPath to /src/assets/images
     mapPath: '/src/assets/images/blurhash-map.json', //Default mapPath to /src/assets/images/blurhash-map.json
     log: true, //Default log to true
     ...options
