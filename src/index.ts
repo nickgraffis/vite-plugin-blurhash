@@ -65,8 +65,8 @@ export const defineHashes =  (options: Options): { define?: { [key: string]: str
  * ---- key: string: The name of the image (for the blurhash map and the define global variable)
  * ---- value: string: The path to the image, or url to the image
  **/
-const plugin = (options: Options): Plugin => {
-  options = {
+const plugin = (options?: Options): Plugin => {
+  const setoptions = {
     define: true, //Default define to true
     imageDir: '/src/assets/images', //Default inputPath to /src/assets/images
     mapPath: '/src/assets/images/blurhash-map.json', //Default mapPath to /src/assets/images/blurhash-map.json
@@ -79,7 +79,7 @@ const plugin = (options: Options): Plugin => {
     buildStart() { }, //Calls the plugin config function on build start
     handleHotUpdate() { }, //Calls the plugin config function on hot update
     config: () => {
-      return defineHashes(options) //Create blurhash strings if needed, and add them to the config: define
+      return defineHashes(setoptions) //Create blurhash strings if needed, and add them to the config: define
     }
   }
 }
