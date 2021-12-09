@@ -22,7 +22,7 @@ export const mergeImagesAndImageDir = ({ images, imageDir }: { images: Images, i
   return [
     ...img,
     ...Object.keys(images).reduce<{ [key: string]: string }[]>((filtered, key) => {
-      if (isValidURL(images[key]) || (existsSync(images[key]) && isImage(images[key]))) {
+      if (isValidURL(images[key]) || (existsSync(process.cwd() + images[key]) && isImage(images[key]))) {
         filtered.push({ [key]: isValidURL(images[key]) ? images[key] : process.cwd() + images[key] })
       }
       return filtered
