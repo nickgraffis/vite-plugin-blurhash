@@ -10,7 +10,7 @@ import { mergeImagesAndImageDir } from './utils/mergeImagesAndImageDir';
  * Save them to the define variabel inside vite and/or in the blurhash-map.json file.
  * @param {Options} options
  **/
-export const defineHashes =  (options: Options): { define?: { [key: string]: string } } => {
+export const defineHashes = (options: Options): { define?: { [key: string]: string } } => {
   const imageDir = options.imageDir && existsSync(process.cwd() + options.imageDir) ? process.cwd() + options.imageDir : false //Get the image directory, unless set to false
 
   const imagesToBlur = mergeImagesAndImageDir({ 
@@ -65,7 +65,7 @@ export const defineHashes =  (options: Options): { define?: { [key: string]: str
  * ---- key: string: The name of the image (for the blurhash map and the define global variable)
  * ---- value: string: The path to the image, or url to the image
  **/
-const plugin = (options?: Options): Plugin => {
+export function blurHash(options?: Options): Plugin {
   const setoptions = {
     define: true, //Default define to true
     imageDir: '/src/assets/images', //Default inputPath to /src/assets/images
@@ -83,5 +83,3 @@ const plugin = (options?: Options): Plugin => {
     }
   }
 }
-
-export default plugin
