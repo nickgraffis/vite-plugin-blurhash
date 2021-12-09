@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import type { Plugin } from 'vite'
 import type { Options } from './types'
 import { blurhashThis } from './utils/blur';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, rmSync } from 'fs';
 import { mergeImagesAndImageDir } from './utils/mergeImagesAndImageDir';
 
 /**
@@ -19,7 +19,13 @@ export const defineHashes = (options: Options): { define?: { [key: string]: stri
   })
 
   const mapPath = options.mapPath ? process.cwd() + options.mapPath : false
-  const blurhashMapExists = mapPath ? existsSync(mapPath) : false
+  let blurhashMapExists = mapPath ? existsSync(mapPath) : false
+
+  if (mapPath && options.overrideMap && blurhashMapExists) {
+    console.log(chalk.green(`Deleting ${mapPath}.`))
+    rmSync(mapPath);
+    blurhashMapExists = false;
+  }
 
   if (!blurhashMapExists && mapPath) {
     console.log(chalk.green(`Writing ${mapPath}.`))
@@ -60,6 +66,7 @@ export const defineHashes = (options: Options): { define?: { [key: string]: stri
  * @options
  * - imageDir: string | boolean: The directory to read images from. Defaults to /src/assets/images
  * - mapPath: string | false: The path to save the blurhash map to. Defaults to /src/assets/images/blurhash-map.json
+ * - overrideMap: boolean: Whether or not to overide the blurhash map at each run. Defaults to true
  * - define: boolean: Whether or not to define the blurhash map in the vite config. Defaults to true
  * - images: object: An object of images to blurhash. 
  * ---- key: string: The name of the image (for the blurhash map and the define global variable)
@@ -70,6 +77,7 @@ export function blurHash(options?: Options): Plugin {
     define: true, //Default define to true
     imageDir: '/src/assets/images', //Default inputPath to /src/assets/images
     mapPath: '/src/assets/images/blurhash-map.json', //Default mapPath to /src/assets/images/blurhash-map.json
+    overrideMap: true, //Default define to true
     log: true, //Default log to true
     ...options
   }

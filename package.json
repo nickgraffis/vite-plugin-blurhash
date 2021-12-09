@@ -22,9 +22,9 @@
   "homepage": "https://github.com/nickgraffis/vite-plugin-blurhash#readme",
   "bugs": "https://github.com/nickgraffis/vite-plugin-blurhash/issues",
   "scripts": {
-    "dev": "npm run build -- --watch",
+    "dev": "npm run build --watch",
     "build": "tsup src/index.ts --dts --format cjs,esm",
-    "test": "jest",
+    "test": "npx jest",
     "prepublishOnly": "npm run build",
     "release": "git-ensure --no-behind -b main --clean && bumpp --commit --tag --push"
   },
@@ -39,7 +39,7 @@
     "eslint-plugin-jest": "^24.4.0",
     "git-ensure": "^0.1.0",
     "jest": "^27.0.6",
-    "ts-jest": "^27.0.4",
+    "ts-jest": "^27.1.1",
     "tsup": "^4.13.1",
     "typescript": "^4.3.5",
     "vite": "^2.4.4"
